@@ -20,11 +20,14 @@ connection = mysql.connector.connect(
 )
 
 mycursor = connection.cursor()
-sql = "INSERT INTO cars (Car_ID, Car_Colour, Car_Make, Car_Model) VALUES (%s, %s, %s, %s)"
-#values = (customerName, customerAddress)
-values = (carID, carColour, carMake, carModel)
 
-mycursor.execute(sql, values)
+# Create a function defining SQL insert
+def sql():
+    query = "INSERT INTO cars (Car_ID, Car_Colour, Car_Make, Car_Model) VALUES (%s, %s, %s, %s)"
+    values = (carID, carColour, carMake, carModel)
+    mycursor.execute(query, values)
+
+sql()
 connection.commit()  # Make changes persistent to DB/Table
 
 for x in mycursor:
