@@ -2,7 +2,11 @@
 
 # Create a Function to define server connection details
 
+from time import time
 import mysql.connector
+from numpy.lib.npyio import save
+import pandas as pd
+import time
 from mysql.connector import Error, connection
 from getpass import getpass
 
@@ -12,7 +16,9 @@ try:
     user=input('Enter username: '), # root,
     password=getpass('Enter password: '), #64lislunnan,
     database='my_schema',
-    auth_plugin='mysql_native_password')
+    auth_plugin='mysql_native_password',    
+    buffered=True)
+
     mycursor = connection.cursor()
     print(connection)
 except Error as cError:
@@ -29,6 +35,14 @@ def sql():
     values = (carID, carColour, carMake, carModel)   
     mycursor.execute(query, values)
     connection.commit()
-    connection.close()
+ 
+def saveSQL():
+    mysql.connector.connect()
+    query = "SELECT * FROM cars"   
+    mycursor.execute(query)    
+    connection.commit()
+    df = pd.read_sql(query, connection)
+    df.to_csv('C:\\Users\\James\\Desktop\\SQL_Export' + time.strftime("%Y%m%d") + '.csv')
 
 sql()
+saveSQL()
