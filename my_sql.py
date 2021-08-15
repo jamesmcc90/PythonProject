@@ -4,7 +4,7 @@
 
 from logging import error
 import mysql.connector
-from mysql.connector import Error, connection
+from mysql.connector import Error, connection, errorcode
 from getpass import getpass
 
 try:
@@ -36,7 +36,13 @@ def sql():
     mycursor.execute(query, values)
     connection.commit()  # Make changes persistent to DB/Table
 
-sql()
+def rowExists():
+    query = "SELECT EXISTS(SELECT * from cars WHERE (%s))"
+    value = (carID)
+    mycursor.execute(query, value)
+    if False(rowExists):
+        sql()
+    else:
+        print("Sorry, this ID exists")
 
-for x in mycursor:
-    print(x)
+connection.close()
