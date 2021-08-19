@@ -1,45 +1,51 @@
+import tkinter as tk
+from tkinter import *
 from time import time
 import mysql.connector
 from numpy.lib.npyio import save
 import pandas as pd
-import time
-import tkinter as tkinter
-from tkinter import *
-import tkinter
-import tkinter.messagebox
+from mysql.connector import Error, connection
+from getpass import getpass
 
-baseWindow = tkinter.Tk()
-baseWindow.title("My Python GUI Application")
-baseWindow.iconbitmap('C:\\Users\\James\\Downloads\\Cornmanthe3rd-Plex-Other-python.ico')
-baseWindow.geometry('400x300')
+root = tk.Tk()
+root.geometry("800x640")
 
-Label(baseWindow, text="Car ID", font=(12)).grid(row=0, column=0)
-inputID = tkinter.Entry(baseWindow)
-inputID.grid(row=0, column=1)
+try:
+    connection = mysql.connector.connect(
+    host='localhost',
+    user=input('Enter username: '), # root,
+    password=getpass('Enter password: '), #64lislunnan,
+    database='my_schema',
+    auth_plugin='mysql_native_password',    
+    buffered=True)
+    mycursor = connection.cursor()
+    print(connection)
+except Error as cError:
+    print(cError)
 
-'''
-def number():
-    try:
-        int(inputID.get())
-    except ValueError:
-        errorLabel.config(baseWindow, text='That is text!', font=(12)).grid(row=10, column=0)
-'''
+def sql():
+    mysql.connector.connect()
+    query = "INSERT INTO cars (Car_ID, Car_Colour, Car_Make, Car_Model) VALUES (%s, %s, %s, %s)"
+    values = (carID, carColour, carMake, carModel)   
+    mycursor.execute(query, values)
+    connection.commit()
 
-errorLabel = Label(baseWindow, text="")
-Label(baseWindow, text="Car Colour", font=(12)).grid(row=2, column=0)
-inputColour = tkinter.Entry(baseWindow)
-inputColour.grid(row=2, column=1)
+labelcarID = Label(root, text="Car ID").place(x = 40, y=20)
+textcarID=tk.Text(root, height=3)
+textcarID.pack()
 
-Label(baseWindow, text="Car Make", font=(12)).grid(row=3, column=0)
-inputMake = tkinter.Entry(baseWindow)
-inputMake.grid(row=3, column=1)
+labelcarID = Label(root, text="Car Colour").place(x = 40, y=60)
+textcarColour=tk.Text(root, height=3)
+textcarColour.pack()
 
-Label(baseWindow, text="Car Model", font=(12)).grid(row=4, column=0)
-inputModel = tkinter.Entry(baseWindow)
-inputModel.grid(row=4, column=1)
+textcarMake=tk.Text(root, height=3)
+textcarMake.pack()
 
-def hello ():
-    tkinter.messagebox.showinfo("Message Box", "Hello there!")
+textcarModel=tk.Text(root, height=3)
+textcarModel.pack()
 
-myButton = tkinter.Button(text="Click Me", command=quit).grid(row=6, column=0)
-baseWindow.mainloop()
+btnRead=tk.Button(root, height=1, width=10, text="Read", command=sql)
+
+btnRead.pack()
+
+root.mainloop()
